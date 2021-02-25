@@ -23,7 +23,6 @@ namespace MyHTTPTrigger
             string name = req.Query["name"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
             List<string> listMessage = new List<string>();
             listMessage.Add(requestBody);
             await Utils.sendViaHEC(listMessage, log);

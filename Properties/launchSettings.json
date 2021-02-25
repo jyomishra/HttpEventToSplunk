@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "HttpEventToSplunk": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "splunkToken": "5323265e-88a0-490f-86f8-5e23837281b8",
+        "splunkAddress": "http://20.198.81.226:8088/services/collector"
+      }
+    }
+  }
+}
