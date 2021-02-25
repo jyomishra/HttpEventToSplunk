@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpEventToSplunk", "HttpEventToSplunk.csproj", "{50B964DB-F2AB-4977-9B66-0C4FA6B5A6A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HttpEventToSplunk", "HttpEventToSplunk/HttpEventToSplunk.csproj", "{50B964DB-F2AB-4977-9B66-0C4FA6B5A6A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
