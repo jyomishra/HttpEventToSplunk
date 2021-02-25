@@ -1,9 +1,9 @@
 {
   "profiles": {
-    "HttpEventToSplunk": {
+    "AzureFunctionForSplunk": {
       "commandName": "Project",
       "environmentVariables": {
-        "splunkToken": "5323265e-88a0-490f-86f8-5e23837281b8",
+        "splunkToken": "8e5d64e6-c508-4bf3-b1a9-fe4f5113b78a",
         "splunkAddress": "http://20.198.81.226:8088/services/collector"
       }
     }
