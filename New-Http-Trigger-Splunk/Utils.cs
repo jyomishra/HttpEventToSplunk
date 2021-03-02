@@ -10,7 +10,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyHTTPTrigger
+namespace New_Http_Trigger_Splunk
 {
     public class Utils
     {
@@ -118,7 +118,7 @@ namespace MyHTTPTrigger
             return false;
         }
 
-        public static async Task sendViaHEC(List<string> standardizedEvents, ILogger log)
+        public static async Task sendViaHEC(string standardizedEvents, ILogger log)
         {
             string splunkAddress = Utils.getEnvironmentVariable("splunkAddress");
             string splunkToken = Utils.getEnvironmentVariable("splunkToken");
@@ -143,36 +143,33 @@ namespace MyHTTPTrigger
             //ServicePointManager.ServerCertificateValidationCallback += new RemoteCertificateValidationCallback(ValidateMyCert);
 
             var client = new SingleHttpClientInstance();
-            foreach (string item in standardizedEvents)
+            string itemToSend = "{\"event\": " + standardizedEvents + ", \"sourcetype\": \"azure\"}";
+            log.LogInformation("Sending data to splunk : " + itemToSend);
+            try
             {
-                string itemToSend = "{\"event\": " + item + ", \"sourcetype\": \"link\"}";
-                log.LogInformation("Sending data to splunk : " + itemToSend);
-                try
+                var httpRequestMessage = new HttpRequestMessage
                 {
-                    var httpRequestMessage = new HttpRequestMessage
-                    {
-                        Method = HttpMethod.Post,
-                        RequestUri = new Uri(splunkAddress),
-                        Headers = {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri(splunkAddress),
+                    Headers = {
                             { HttpRequestHeader.Authorization.ToString(), "Splunk " + splunkToken }
                         },
-                        Content = new StringContent(itemToSend, Encoding.UTF8, "application/json")
-                    };
+                    Content = new StringContent(itemToSend, Encoding.UTF8, "application/json")
+                };
 
-                    HttpResponseMessage response = await SingleHttpClientInstance.SendToService(httpRequestMessage);
-                    if (response.StatusCode != HttpStatusCode.OK)
-                    {
-                        throw new System.Net.Http.HttpRequestException($"StatusCode from Splunk: {response.StatusCode}, and reason: {response.ReasonPhrase}");
-                    }                     
-                }
-                catch (System.Net.Http.HttpRequestException e)
+                HttpResponseMessage response = await SingleHttpClientInstance.SendToService(httpRequestMessage);
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    throw new System.Net.Http.HttpRequestException("Sending to Splunk. Is Splunk service running?", e);
+                    throw new System.Net.Http.HttpRequestException($"StatusCode from Splunk: {response.StatusCode}, and reason: {response.ReasonPhrase}");
                 }
-                catch (Exception f)
-                {
-                    throw new System.Exception("Sending to Splunk. Unplanned exception.", f);
-                }
+            }
+            catch (System.Net.Http.HttpRequestException e)
+            {
+                throw new System.Net.Http.HttpRequestException("Sending to Splunk. Is Splunk service running?", e);
+            }
+            catch (Exception f)
+            {
+                throw new System.Exception("Sending to Splunk. Unplanned exception.", f);
             }
         }
 
